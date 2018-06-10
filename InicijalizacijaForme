@@ -1,0 +1,40 @@
+OleDbCommand komanda;
+        OleDbDataReader rider;
+        OleDbConnection konekcija;
+        int br = 0;
+        int[] brknj = new int[50];
+        public FrmKategorija()
+        {
+
+            InitializeComponent();
+            string putanja = Environment.CurrentDirectory;
+            string[] putanjaBaze = putanja.Split(new string[] { "bin" }, StringSplitOptions.None);
+            AppDomain.CurrentDomain.SetData("DataDirectory", putanjaBaze[0]);
+            konekcija = new OleDbConnection(@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|\B14KolekcijaKnjiga.accdb");
+
+        }
+        private void FrmKategorija_Load(object sender, EventArgs e)
+        {
+            chart1.Series.Clear();
+            chart1.Legends.Clear();
+            checkedListBox1.Items.Clear();
+            try
+            {
+                konekcija.Open();
+                komanda = new OleDbCommand("SELECT KATEGORIJA.KategorijaID, KATEGORIJA.Naziv, Count(*) AS Broj FROM KATEGORIJA INNER JOIN KNJIGA ON KATEGORIJA.KategorijaID = KNJIGA.KategorijaID GROUP BY KATEGORIJA.KategorijaID, KATEGORIJA.Naziv ORDER BY KATEGORIJA.Naziv;", konekcija);
+                rider = komanda.ExecuteReader();
+                while (rider.Read())
+                {
+                    checkedListBox1.Items.Add(rider[1]);
+                    brknj[br] = Convert.ToInt32(rider[2].ToString());
+                    br++;
+                }
+                konekcija.Close();
+            }
+
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.ToString(), "Neuspelo povezivanje sa bazom!\nMolimo, pokušajte ponovo.");
+                konekcija.Close();
+            }
+        }
