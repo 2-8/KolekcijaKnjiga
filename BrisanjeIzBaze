@@ -1,0 +1,51 @@
+private void brisanje_Click(object sender, EventArgs e)
+        {
+            bool pom = false;
+            konekcija.Open();
+            komanda = new OleDbCommand("Select * from KNJIGA", konekcija);
+            komanda2 = new OleDbCommand("Select KnjigaID from KNJIGA", konekcija);
+            adapter = new OleDbDataAdapter(komanda);
+            tabelaKnjiga = new DataTable();
+            adapter.Fill(tabelaKnjiga);
+            OleDbDataReader r;
+
+            r = komanda2.ExecuteReader();
+
+            int i = Convert.ToInt32(tbSIfra.Text);
+
+            for (int j = 0; j < tabelaKnjiga.Rows.Count; j++)
+            {
+                r.Read();
+                if (i == Int32.Parse(r[0].ToString()))
+                    pom = true;
+            }
+
+            if (!pom)
+            {
+                MessageBox.Show("Unesite novi ID, uneti ne postoji u tabeli!", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tbSIfra.Clear();
+            }
+            else
+            {
+                i++;
+                string del = "DELETE * FROM KNJIGA WHERE KnjigaID=@id";
+                string del3 = "DELETE * FROM AUTOR_IZDANJE WHERE KnjigaID=@id";
+                komanda = new OleDbCommand(del, konekcija);
+                komanda3 = new OleDbCommand(del3, konekcija);
+                komanda.Parameters.AddWithValue("@id", tbSIfra.Text);
+                komanda3.Parameters.AddWithValue("@id", tbSIfra.Text);
+
+                try
+                {
+                    komanda.ExecuteNonQuery();
+                    komanda3.ExecuteNonQuery();
+                    MessageBox.Show("Stavka je uspesno obrisana!", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch
+                {
+                    MessageBox.Show("Greska pri brisanju!", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                tbSIfra.Clear();
+            }
+            konekcija.Close();
+        }
