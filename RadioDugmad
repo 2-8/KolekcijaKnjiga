@@ -1,0 +1,30 @@
+ private void rbUpis_CheckedChanged(object sender, EventArgs e)
+        {
+            if(rbUpis.Checked==true)
+            {
+               cbNaziv.Text = ""; tbKomentar.Clear(); tbBrStr.Clear();
+                cbKategorija.Text = "";
+                tbSIfra.Text="";
+                unos.Enabled = true;
+                brisanje.Enabled = false;
+                tbSIfra.Enabled = cbKategorija.Enabled = cbNaziv.Enabled = tbKomentar.Enabled = tbBrStr.Enabled = true;
+                label6.Visible = true;
+                label7.Visible = true;
+            }
+        }
+        
+        private void rbBrisanje_CheckedChanged(object sender, EventArgs e)
+        {
+            if(rbBrisanje.Checked==true)
+            {
+                cbNaziv.Text = ""; tbKomentar.Clear(); tbBrStr.Clear();
+                cbKategorija.Text = "";
+                tbSIfra.Text = "";
+                unos.Enabled = false;
+                brisanje.Enabled = true;
+                tbSIfra.Enabled = true;
+                cbKategorija.Enabled = cbNaziv.Enabled = tbKomentar.Enabled = tbBrStr.Enabled = false;
+                label6.Visible = false;
+                label7.Visible = false;
+            }
+        }
