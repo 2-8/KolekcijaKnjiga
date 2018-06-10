@@ -1,0 +1,18 @@
+private void rbUpis_CheckedChanged(object sender, EventArgs e)
+        {
+            if(rbUpis.Checked==true)
+            {
+                brisanje.Enabled = false;
+                upis.Enabled = tbSifra.Enabled = tbIme.Enabled = tbPrezime.Enabled = true;
+                dtpiker.Enabled = true;
+            }
+            else
+            {
+                upis.Enabled = false;
+                brisanje.Enabled =  true;
+                tbIme.Enabled = tbPrezime.Enabled = false;
+                dtpiker.Enabled = false;
+                tbSifra.Enabled = true;
+                tbSifra.Clear();
+            }
+        }
