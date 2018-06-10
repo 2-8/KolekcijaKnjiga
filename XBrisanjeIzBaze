@@ -1,0 +1,24 @@
+private void brisanje_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                konekcija.Open();
+                string del = "DELETE * FROM AUTOR WHERE AutorID=@id";
+                string del1 = "DELETE * FROM AUTOR_IZDANJE WHERE AutorID=@id";
+                komanda = new OleDbCommand(del, konekcija);
+                OleDbCommand komanda3 = new OleDbCommand(del1, konekcija);
+                komanda.Parameters.AddWithValue("@id", tbSifra.Text);
+                komanda3.Parameters.AddWithValue("@id", tbSifra.Text);
+                komanda.ExecuteNonQuery();
+                komanda3.ExecuteNonQuery();
+                MessageBox.Show("Uspesno obrisano iz baze!");
+                tbIme.Clear();
+                tbPrezime.Clear();
+                dtpiker.Value = DateTime.Now;
+            }
+            catch
+            {
+                MessageBox.Show("Greska prilikom brisanje iz baze");
+            }
+            konekcija.Close();
+        }
