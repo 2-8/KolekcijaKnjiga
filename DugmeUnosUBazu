@@ -1,0 +1,62 @@
+private void unos_Click(object sender, EventArgs e)
+        {
+            konekcija.Open();
+            OleDbCommand komanda = new OleDbCommand("SELECT MAX(KnjigaID)FROM KNJIGA;", konekcija);
+            riderPrikaz = komanda.ExecuteReader();
+            riderPrikaz.Read();
+            slID = Convert.ToInt32(riderPrikaz[0].ToString()) + 1;
+
+            int sifra = Convert.ToInt32(tbSIfra.Text);
+            try
+            {
+                if (sifra == slID)
+                {
+                    string kom1 = "Insert into [Knjiga] ([KnjigaId], [Naziv], [BrojStrana], [KategorijaID], [Komentar])";
+                    string kom2 = " values (@KnjigaId, @Naziv, @BrojStrana, @KategorijaID, @Komentar)";
+                    komandaUpis = new OleDbCommand(kom1 + kom2, konekcija);
+                    komandaUpis.Parameters.AddWithValue("@KnjigaID", sifra);
+                    komandaUpis.Parameters.AddWithValue("@Naziv", cbNaziv.Text);
+                    if (tbBrStr.Text != "")
+                    {
+                        brstr = Convert.ToInt32(tbBrStr.Text);
+                        if (brstr > 0)
+                        {
+                            komandaUpis.Parameters.AddWithValue("@BrojStrana", brstr);
+                        }
+
+                    }
+                    else
+                    {
+                        komandaUpis.Parameters.AddWithValue("@BrojStrana", DBNull.Value);
+                    }
+                    komandaUpis.Parameters.AddWithValue("@KategorijaID", cbKategorija.SelectedIndex + 1);
+                    if (tbKomentar.Text != "")
+                    {
+                        komandaUpis.Parameters.AddWithValue("@Komentar", tbKomentar.Text);
+                    }
+                    else
+                    {
+                        komandaUpis.Parameters.AddWithValue("@Komentar", DBNull.Value);
+                    }
+                    komandaUpis.ExecuteNonQuery();
+                    MessageBox.Show("Uspesan upis podataka", "Poruka");
+                    cbNaziv.Text = ""; tbKomentar.Clear(); tbBrStr.Clear();
+                    cbKategorija.Text = "";
+                    tbSIfra.Text = "";
+                }
+                else
+                {
+                    MessageBox.Show("Niste uneli dobar ID, treba da unesete " + slID.ToString());
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Neispravan format unetih podataka za definisana polja!");
+                if (brstr < 0)
+                {
+                    MessageBox.Show("Broj strana mora biti veći od 0 ako se unosi!");
+                }
+                konekcija.Close();
+            }
+            konekcija.Close();
+        }
