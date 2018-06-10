@@ -1,0 +1,34 @@
+ private void tbSifra_TextChanged(object sender, EventArgs e)
+        {
+            if(rbBrisanje.Checked==true)
+            {
+                try
+                {
+                    if(tbSifra.Text!="")
+                    {
+                        konekcija.Open();
+                        int sifra = Convert.ToInt32(tbSifra.Text);
+                        komanda = new OleDbCommand("SELECT * FROM AUTOR WHERE AutorID=" + sifra, konekcija);
+                        reader = komanda.ExecuteReader();
+                        reader.Read();
+                        tbIme.Text = reader[1].ToString();
+                        tbPrezime.Text = reader[2].ToString();
+                        string s1 = reader[3].ToString();
+                        dtpiker.Value = Convert.ToDateTime(s1);
+                    }
+                    else
+                    {
+                        tbSifra.Clear();
+                        tbIme.Clear();
+                        tbPrezime.Clear();
+                    }
+                }
+                catch
+                {
+                    tbIme.Clear();
+                    tbPrezime.Clear();
+                    MessageBox.Show("Ne postoji!");
+                }
+                konekcija.Close();
+            }
+        }
