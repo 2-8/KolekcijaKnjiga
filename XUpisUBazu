@@ -1,0 +1,66 @@
+private void upis_Click(object sender, EventArgs e)
+        {
+            string ime, prezime, ID, dr;
+            ime = tbIme.Text;
+            prezime = tbPrezime.Text;
+            ID = tbSifra.Text;
+            dr = dtpiker.Value.ToShortDateString();
+            DateTime datum = DateTime.Now;
+            int dan = datum.Day;
+            int mesec = datum.Month;
+            int godina = datum.Year;
+            int dan1, mesec1, godina1;
+            dan1 = dtpiker.Value.Day;
+            mesec1 = dtpiker.Value.Month;
+            godina1 = dtpiker.Value.Year;
+            try
+            {
+                if(tbSifra.Text=="" || tbIme.Text=="" || tbPrezime.Text=="")
+                {
+                    MessageBox.Show("Sifra, ime i prezime su obavezna polja, molim vas popunite ih!");
+                    if (tbSifra.Text == "")
+                        tbSifra.Focus();
+                    else if (tbIme.Text == "")
+                        tbIme.Focus();
+                    else
+                        tbPrezime.Focus();
+                }
+                else if(godina1>=2000)
+                {
+                    MessageBox.Show("Pisac mora biti rodjen pre 2000. godine, molim vas promenite datum!");
+                }
+                else if (dan == dan1 && mesec == mesec1 && godina == godina1)
+                {
+                    konekcija.Open();
+                    string cmd = "INSERT INTO AUTOR(AutorID,Ime,Prezime) VALUES ('" + ID + "', '" + ime + "', '" + prezime + "')";
+                    komanda = new OleDbCommand(cmd, konekcija);
+                    komanda.ExecuteNonQuery();
+                    MessageBox.Show("Godina rodjenja nece biti upisana u bazu, jer niste izabrali datum!");
+                    MessageBox.Show("Podaci su uspesno upisani u bazu!");
+                    tbIme.Clear();
+                    tbPrezime.Clear();
+                    tbSifra.Clear();
+                    dtpiker.Value = datum;
+                }
+                else
+                {
+                    konekcija.Open();
+                    string cmd = "INSERT INTO AUTOR(AutorID,Ime,Prezime,DatumRodjenja) VALUES ('" + ID + "', '" + ime + "', '" + prezime + "', '" + dr + "')";
+                    komanda = new OleDbCommand(cmd, konekcija);
+                    komanda.ExecuteNonQuery();
+                    MessageBox.Show("Podaci su uspesno upisani u bazu!");
+                    tbIme.Clear();
+                    tbPrezime.Clear();
+                    tbSifra.Clear();
+                    dtpiker.Value = datum;
+                }
+
+            }
+            catch
+            {
+                MessageBox.Show("Postoji autor sa istom sifrom, molim unesite drugu!");
+                tbSifra.Clear();
+                tbSifra.Focus();
+            }
+            konekcija.Close();
+        }
