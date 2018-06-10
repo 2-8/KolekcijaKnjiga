@@ -1,0 +1,33 @@
+ private void tbSIfra_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (rbBrisanje.Checked == true)
+                {
+                    if (tbSIfra.Text != "")
+                    {
+                        konekcija.Open();
+                        int sifra = Convert.ToInt32(tbSIfra.Text);
+                        OleDbCommand komanda = new OleDbCommand("SELECT * FROM KNJIGA where KnjigaID=" + sifra, konekcija);
+                        OleDbDataReader readerNaziv = komanda.ExecuteReader();
+                        readerNaziv.Read();
+                        cbNaziv.Text = readerNaziv[1].ToString();
+                        tbBrStr.Text = readerNaziv[2].ToString();
+                        cbKategorija.SelectedItem = cbKategorija.Items[Convert.ToInt32(readerNaziv[3])];
+                        tbKomentar.Text = readerNaziv[4].ToString();
+                    }
+                    else
+                    {
+                        cbNaziv.Text = ""; tbKomentar.Clear(); tbBrStr.Clear();
+                        cbKategorija.Text = "";
+                    }
+                }
+            }
+            catch
+            {
+                cbNaziv.Text=""; tbKomentar.Clear(); tbBrStr.Clear();
+                cbKategorija.Text = "";
+                MessageBox.Show("Ne postoji!");
+            }
+            konekcija.Close();
+        }
