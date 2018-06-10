@@ -1,0 +1,30 @@
+ private void prikaz_Click(object sender, EventArgs e)
+        {
+            chart1.ResetAutoValues();
+            int i = 0;
+            chart1.Series.Clear();
+            chart1.Legends.Clear();
+            chart1.Legends.Add("Broj knjiga");
+            string seriesname = "Broj knjiga";
+            chart1.Series.Add(seriesname);
+            chart1.ChartAreas[0].AxisX.LabelStyle.Angle = -90;
+            for (int j = 0; j < br; j++)
+            {
+                if (checkedListBox1.GetItemCheckState(j) == CheckState.Checked)
+                {
+                    chart1.Series[seriesname].Points.AddXY(checkedListBox1.Items[j].ToString(), brknj[j]);
+                    i++;
+                }
+                if (i > 3)
+                {
+                    chart1.Series.Clear();
+                    MessageBox.Show("Morate izabrati 3 kategorije!");
+                    break;
+                }
+            }
+            if (i < 3)
+            {
+                chart1.Series.Clear();
+                MessageBox.Show("Morate izabrati 3 kategorije!");
+            }
+        }
