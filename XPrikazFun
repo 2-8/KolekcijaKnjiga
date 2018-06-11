@@ -18,13 +18,13 @@
                 if (i > 3)
                 {
                     chart1.Series.Clear();
-                    MessageBox.Show("Morate izabrati 3 kategorije!");
+                    MessageBox.Show("Morate izabrati 3 autora!");
                     break;
                 }
             }
             if (i < 3)
             {
                 chart1.Series.Clear();
-                MessageBox.Show("Morate izabrati 3 kategorije!");
+                MessageBox.Show("Morate izabrati 3 autora!");
             }
         }
